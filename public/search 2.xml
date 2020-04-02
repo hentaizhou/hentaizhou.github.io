@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Nuxt i18n国际化]]></title>
+    <url>%2F2019%2F03%2F31%2FNuxt.js%20%20i18n%E5%9B%BD%E9%99%85%E5%8C%96%2F</url>
+    <content type="text"><![CDATA[Nuxt.js集成国际化前言​ 公司官网需求要加上国际化， 之前官网使用的是vue的 nuxt框架，然后generate生成的静态页面，看了一下，nuxt官方有集成i18n的示例就跟着弄了一下，期间也踩了一些坑。 准备工作安装​ npm install vue-i18n –save 在nuxt.config.js 中配置​ 12345plugins: ['~/plugins/i18n.js'],router: &#123; middleware: ['i18n']&#125; 在plugins文件夹下新建i18n.js​ 12345678910111213141516171819202122232425import Vue from 'vue'import VueI18n from 'vue-i18n'Vue.use(VueI18n)export default (&#123; app, store &#125;) =&gt; &#123; // Set i18n instance on app // This way we can use it in middleware and pages asyncData/fetch app.i18n = new VueI18n(&#123; locale: store.state.locale, fallbackLocale: 'cn', messages: &#123; en: require('~/locales/en.json'), cn: require('~/locales/cn.json') &#125; &#125;) app.i18n.path = link =&gt; &#123; if (app.i18n.locale === app.i18n.fallbackLocale) &#123; return `/$&#123;link&#125;` &#125; return `/$&#123;app.i18n.locale&#125;/$&#123;link&#125;` &#125;&#125; 在middleware文件夹下新建 i18n.js​ 12345678910111213141516171819202122export default function (&#123; isHMR, app, store, route, params, error, redirect &#125;) &#123; const defaultLocale = app.i18n.fallbackLocale // If middleware is called from hot module replacement, ignore it if (isHMR) return // Get locale from params // const locale = params.lang || defaultLocale const locale = params.lang || defaultLocale if (store.state.locales.indexOf(locale) === -1) &#123; return error(&#123; message: 'This page could not be found.', statusCode: 404 &#125;) &#125; // Set locale store.commit('SET_LANG', locale) app.i18n.locale = store.state.locale // If route is /&lt;defaultLocale&gt;/... -&gt; redirect to /... if (locale === defaultLocale &amp;&amp; route.fullPath.indexOf('/' + defaultLocale) === 0) &#123; const toReplace = '^/' + defaultLocale + (route.fullPath.indexOf('/' + defaultLocale + '/') === 0 ? '/' : '') const re = new RegExp(toReplace) return redirect( route.fullPath.replace(re, '/') ) &#125;&#125; 创建本地语言库​ 在根目录下新建文件夹locales， 然后在文件夹下添加你要翻译的语言的json文件 。 在store文件夹下新建index.js​ 123456789101112export const state = () =&gt; (&#123; locales: ['en', 'cn'], locale: 'cn'&#125;)export const mutations = &#123; SET_LANG(state, locale) &#123; if (state.locales.indexOf(locale) !== -1) &#123; state.locale = locale &#125; &#125;&#125; 踩坑……​ 好了，照着官方把该加的都加了，这下就能实现国际化的切换了吧。 然后参考了几篇文章， 通过 this.$i18n.locale = Langname 或是 this.$store.commit(‘SET_LANG’, lang) 切换语言。 结果要不就是404， 要不就是一个页面切换了，然后换个页面，也就是切换了路由又变回原来的语言了。。。 ​ 结果找了好久发现是路由的问题，主要是middleware中的这一段代码: 1234567const locale = params.lang || defaultLocale if (store.state.locales.indexOf(locale) === -1) &#123; return error(&#123; message: 'This page could not be found.', statusCode: 404 &#125;) &#125; // Set locale store.commit('SET_LANG', locale) app.i18n.locale = store.state.locale 每次我们切换页面的时候都会调用这个中间件，然后会去判断路由中的params 如果lang参数有值就将语言设置为对应的值。 ​ 比如我的地址是 “http://localhost/zn/&quot; 那么中间件就会将当前的lang设置为zn 如果就是”http://localhost/&quot; 就会设置为默认的值. ​ 所以之前我们手动设置了store中的值，切换了路由就会变回原样是因为每次中间件都会把locale设置成默认值(因为我们路由中没有带参数)。 ​ 可是当我们路由带上参数后切出现找不到页面的情况，这是因为当前路径下，比如 “http://localhost/zn/&quot; 找不到我们的页面。 这是我们就要用到nuxt提供给我们的一个 动态路由的功能。 ​ 动态路由根据官方可如下配置，因为nuxt是根据page下目录生成路由，可如下组织目录: _lang 就是动态路由下的参数项，这样不管是带不带参数都能找到页面了。]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>i18n</tag>
+        <tag>nuxt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[css多行文本省略号]]></title>
+    <url>%2F2019%2F03%2F21%2Fcss%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E7%9C%81%E7%95%A5%E5%8F%B7%2F</url>
+    <content type="text"><![CDATA[CSS多行文本设置省略号单行文本省略号 如果要设置单行文本超出容器末尾显示省略号是非常简单的，通过: 12overflow: hidden;text-overflow: ellipsis; 即可实现单行文本的省略号。 多行文本的省略号​ 下面就是本文主要讨论的点了，如何实现多行文本超出区域显示省略号，或者说可以设置最多显示几行。 ​ 实现的方式有多种，可以用css，也可以用js。 其中css也有多种方法, 但一些方法或多或少都有点hack的味道，下面我们介绍一种浏览器原生的多行文本显示的方法。 在包含文本的标签中添加如下css样式: 1234567p &#123; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4;&#125; Tips: 1. 只有中文内容在到达最大宽度时才会自动换行 如果要英文支持的话需要添加 word-break: break-all 文本才会换行。 经测试 此css样式在chrome、safari浏览器上能正常生效，但在Firefox上好像并不起效果。 踩坑​ 单独尝试添加上面的样式可以实现多行省略号，但我在Vue以及nuxt框架下开发，几经尝试都不起效果，一直认为是不是浏览器不支持这个样式。结果倒腾许久才发现是 autoprefixer这个插件干的”好事”。 在原来的css中我们添加了-webkit-box-orient: vertical 这个样式。 但是经过 autoprefixer 处理之后，元素中竟然没有了！！ 好吧。。。 手动加上之后就可以实现多行文本省略号的效果了。 ​ 那怎么解决 autoprefixer去掉 -webkit-box-orient: vertical 这个样式的问题呢？ 很简单，在该样式样多加一条注释 /*! autoprefixer: off */ 。 ​ 哦了，这下我们就能愉快的使用多行文本设置省略号了～]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+        <tag>css技巧</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[2018 Review]]></title>
+    <url>%2F2019%2F02%2F11%2F2018-Review%2F</url>
+    <content type="text"><![CDATA[2018 ——reborn 年前就打算做一个2018年的年度总结，但一直不知道写些什么。。。2018年对我来说算是大学乃至整个学生生涯最重要的一年吧。无论是学习、竞赛、情感、人生规划…… 2～3月 这个时间段是放寒假期间，基本一天都宅在家。 自从大二下进入实验室已经差不多大半年了，除开第一次电赛的惨败，大三上多多少少参加了一些学校、学院的竞赛，也或多或少拿了一些奖，但总感觉就是小打小闹。假期无聊试着学了下python爬虫，说白了也就是照着视频敲，也不知道学了有啥用。 当时的状态就是想着要去学新东西，但不知道学啥，学了之后能干啥。。 之后偶然去基友家接触了前端开发，当时真被前端吸引了，一两行代码就能实现这么炫酷的页面效果，要是换在单片机上显示普通点的页面都够呛。 而且正好我们后续做的页面需要懂前端这一块， 所以差不多开学后，我就开始了我的前端爬坑之旅。 3～6月 虽然专业课从没学过前端相关的内容， 实验室也没接触过，周围人也基本都不了解这一块。 但当时可能就是痴迷这一块，一天都在网上看视频学习，有时还逃课在寝室看前端的东西。想想当时也很拼了，不确定以后是否从事这个行业，只是当时痴迷于其中。 但当时的压力确实也挺大的，一是放下当时搞的还不错的嵌入式，二是当大家都在主要搞嵌入式时，就自己一个人，‘一枝独秀’瞎琢磨前端， 想想还颇有一副虽千万人吾往矣的壮阔。 其实前期学习的压力到没多大，转折应该是5月初基友介绍一个微信公众号的项目，当时想着学了还是有一阵子了，就先做个练练手吧。。 结果接手之后，一脸懵逼，公众号开发用啥开发呀？问基友，说用node.js ， 好吧，又是一个没听过的东西，不过是js的语法，快速上手应该不成问题。 然后， 就开始了黑暗的一周。。。。 早起晚睡，基本天天都是在看这些。。 估摸着那一周起嘛瘦了几斤…… 然后终于熬出来了之后，回过头才发现。。 这tm好像是偏后端那一块的吧。。。 反正那周学会了搭服务器，配置nginx，写node.js 。。。 跟之前看的前端页面除了js语法，其他都没太大关系。。。 不过这也算我的第一次实战吧，虽然好像有点偏。。。 差不多到了5月中旬， 我们团队都把全部精力投入在后面的智能互联比赛上了，前端的学习也暂时告一段落，又回到了熟悉的单片机开发中。 可能是之前一直在准备，要用到的模块之前也大多都调试好了，所以后面个多月还算比较顺利，也没熬几个夜哈哈。这次算是加入实验室来花的时间最多，投入精力最多的一次比赛了，那段时间就差住在实验室了。 不过也是因为基本全部精力投入在那上面，忽略了很多很重要的东西，也放弃了很多很重要的东西…… 不过还好有一起努力的同伴，还有鼓励我，在崩溃边缘拉我一把的人。 7～9月 七月初差不多我们的作品就做好了，当时做完后其实还挺激动的，从下位机到公众号到H5网页，整个作品软件部分都是自己一个人完成的，当然团队也非常的给力，整个作品做出来看着还算不错的。第一次去成都西南赛区决赛，过程也是很曲折了，从出发前到比赛完之后一直都挺跌宕起伏的，不过好在最后拿到了赛区第一，获得了参加全国赛的资格。 在金康汽车设计院实习期间请假去了南京参加全国赛，这也是第一次去这么远的地方，参加比较重要的比赛吧。由于吸取了西南赛区的经验，我们没有把全部精力投入在技术以及作品的调试上，更多的是放在了作品的定位以及团队答辩的配合上。也许是西南赛区的一些波折吧，让我深刻认识到一个成熟且受欢迎的产品，技术只是占其中一部分，甚至只是一小部分。更多的是对这个产品的定位以及包装等一系列无关技术但起着至关重要作用的东西。到南京时正好刮大风，我们也算正好乘着这阵风，在大学生涯算是最后是一场竞赛中获得了全国一等奖。 也算意外中的意料之中吧， 算上准备时间，为期2个多月的‘旅途’终于画上了句号。 以前看着那些参加竞赛获奖，全国各地到处比赛，能和自己团队的一起为某个目标奋斗的人，就觉得好厉害，这样的大学生活和窝在寝室玩游戏简直不能比。大一大二基本是寝室——教学楼 两点一线的我，曾经只想着安稳毕业，随便找个工作，过上大部分人都在过的生活，乖乖的当好韭菜就好。可经历过耗上全部精力投身自己的热爱，和一群小伙伴一起为一个目标聚在一起。哭过、笑过、迷茫过、也曾想过放弃，可那一个个熬过的夜，那一次次调试通过后的畅快，那不坚持到最后不服输的偏执，正是牵引我们在黑夜中徐徐前行的微光吧。 结束金康这边的实习后，进了现在的公司。 许是经过了这大半年的折腾，已经完全摒弃了以前安于现状，按部就班的生活方式。现在更想做更多自己想做的事，看更广阔的风景，见更多有趣的人，想更多以前不敢想的事。 能和以前实验室的伙伴们，在创业公司继续折腾，甚至能有机会尝试前端的工作，对我来说，都是一次不可多得的机会。 ～now 开学后大半时间在公司，做课设期间也在学校呆了挺久。可能是还没毕业，上班久了难免会想回学校和同学、室友们度过这最后的大学时光…… 回学校的两个多月，格外珍惜这有限的时光，每天能一起上下课，能一起谈天说地，在最后的一周多还能和一群有趣的小姐姐一起做毕设，虽然很累吧，但真的格外珍惜这大家聚在一起的温馨，仿佛回到当初实验室一群小伙伴整天待在一起的时候…… 我们在拥有的时候总是不以为然，却又在即将失去的时候慌了阵脚。 后面一段时间，可能面对一些事，一些人陷入了比较长的烦恼期。会去仔细想曾经不曾想的未来的规划，以及自己想成为什么样的人。。。 但也正是因为这个契机，也让我开始学会慢慢规划以后的生活，尝试去搞明白做一些事的意义。 summary 2018给我最大的感受就是改变，学习、生活、观念、认知上的改变，同时也是进步最大的一年。从大一大二的懵懵懂懂，慢慢找到了大学的方向，并投入全部热爱到里面，还取得了不错的成绩。 其实这些都是外在的，无非就是多了几个奖，多了几个标签，最重要的还是内在的成长。不管是去外面参加比赛，还是实习工作，让我认识最深的就是 ‘眼界决定高度’ 。 我们所经历的每件事， 见到的每个人都会在成长路上留下或深或浅的印记，珍惜投入热情做事时的时光，感谢帮助你成长的每个人，不管当时是让你开心还是难过。 ​ 最后引用龙族里面的一句话： “其实每个人的人生都是一部公路片，别在乎跑去哪里，关键是一直在跑， 反正最后的目的地一定是座墓碑。” 是啊， 反正目的地都一样。 我们唯一能决定的就是，在沿途我们能见到什么样的风景，遇到什么样的同行的人。 旅途还长，旅途才刚开始。 2018， 是那么的不舍 2019， 是那么的期待]]></content>
+      <categories>
+        <category>annual review</category>
+      </categories>
+      <tags>
+        <tag>年度总结</tag>
+        <tag>2018</tag>
+      </tags>
+  </entry>
+</search>

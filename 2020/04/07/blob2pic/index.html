@@ -90,18 +90,18 @@
 
 
 
-<meta name="description" content="## 二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:   1234567891011121314151617function arrayBufferT">
+<meta name="description" content="二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:">
 <meta name="keywords" content="blob">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二进制流转图片">
 <meta property="og:url" content="http://yoursite.com/2020/04/07/blob2pic/index.html">
 <meta property="og:site_name" content="深夜杂记">
-<meta property="og:description" content="## 二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:   1234567891011121314151617function arrayBufferT">
+<meta property="og:description" content="二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-07T15:45:15.646Z">
+<meta property="og:updated_time" content="2020-04-07T15:53:42.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="二进制流转图片">
-<meta name="twitter:description" content="## 二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:   1234567891011121314151617function arrayBufferT">
+<meta name="twitter:description" content="二进制流(ArrayBuffer)转为图片  首先通过ajax或者ws获取到传来的二进制流数据   responseType 需要设置为arraybuffer。  然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:">
 
 
 
@@ -414,7 +414,7 @@
       
 
       
-        <p><strong>## 二进制流(ArrayBuffer)转为图片</strong></p>
+        <p><strong>二进制流(ArrayBuffer)转为图片</strong></p>
 <ol>
 <li>首先通过ajax或者ws获取到传来的二进制流数据</li>
 </ol>
@@ -422,6 +422,7 @@
 <li><p>responseType 需要设置为arraybuffer。</p>
 </li>
 <li><p>然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64:</p>
+<a id="more"></a>
 </li>
 </ol>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">arrayBufferToBase64</span>(<span class="params">buffer</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> binary = <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> bytes = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(buffer);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> len = bytes.byteLength;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line"></span><br><span class="line">        binary += <span class="built_in">String</span>.fromCharCode(bytes[i]);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">window</span>.btoa(binary);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

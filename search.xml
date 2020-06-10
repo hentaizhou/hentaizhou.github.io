@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[前端知识点梳理 --part one]]></title>
+    <url>%2F2020%2F06%2F10%2F%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86%20%20%20--part%20one%2F</url>
+    <content type="text"><![CDATA[前端知识点梳理 –part one基础部分1. Html 语义化的好处 ? 使html的结构更清晰，更直观，更易于seo 2. 清除浮动的方法有哪些 ？ 定义一个空标签再浮动元素之后。 然后给其 clear: both 定义伪元素来清除浮动 使用overflow:auto（空标签元素清除浮动而不得不增加无意代码的弊端,,使用zoom:1用于兼容IE）。 3. img标签 alt 和 title的异同 alt 是当图片显示不出来时显示的文字。 title 是hover时显示的提示文字。 (描述性文字， 一直都有) 总结： alt是当正常图片显示不出来时的替代内容。title是一直存在的描述性内容。 4. 行内元素有哪些？块级元素有哪些？ 空(void)元素有那些? 行内元素: i、strong、b、bm、a、span、input、select、img 块级元素: div、h(x)、p、ul、ol、li 空元素 br 5. html5有哪些新特性、移除了那些元素？如何处理HTML5新标签的浏览器兼容问题？如何区分 HTML 和 HTML5？ 新增的元素 语义化元素: article、section、header、nav、footer 音视频元素：video、audio 画布元素： canvas 表单控件： time、email、date、calendar…… 缓存 local storage、session storage 新技术： webworkr、geolacation、websocket 移除的元素 frame、frameset，noframes 纯表现的元素： basefont，big，center，font, s，strike，tt，u 如何支持新的标签 直接使用成熟的框架、使用最多的是html5shim框架 如何区分是html5 docType/新增的元素]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>summary</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[二进制流转图片]]></title>
     <url>%2F2020%2F04%2F07%2Fblob2pic%2F</url>
     <content type="text"><![CDATA[二进制流(ArrayBuffer)转为图片 首先通过ajax或者ws获取到传来的二进制流数据 responseType 需要设置为arraybuffer。 然后我们拿到所需的二进制数据， 通过console打印发现是一个ArrayBuffer，接着我们对其进行如下处理，转为base64: 1234567891011121314151617function arrayBufferToBase64(buffer) &#123; var binary = ''; var bytes = new Uint8Array(buffer); var len = bytes.byteLength; for (var i = 0; i &lt; len; i++) &#123; binary += String.fromCharCode(bytes[i]); &#125; return window.btoa(binary);&#125; 显示图片。 接着我们把收到的二进制数据通过上面的函数转为url: 1let url= arrayBufferToBase64(response); ​ 然后将生成的url放到img标签的src属性中： 1document.getElementById('img').src='data:image/jpeg;base64,'+url; ​ 大功告成～]]></content>

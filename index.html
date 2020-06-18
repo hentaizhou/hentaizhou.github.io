@@ -312,6 +312,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/19/不使用 + 、-求两个数的和 （含符号）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/19/不使用 + 、-求两个数的和 （含符号）/" itemprop="url">不使用 + 、-求两个数的和 （含符号）</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-19T00:11:23+08:00">
+                2020-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/19/不使用 + 、-求两个数的和 （含符号）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/19/不使用 + 、-求两个数的和 （含符号）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="不使用-、-求两个数的和-（含符号）"><a href="#不使用-、-求两个数的和-（含符号）" class="headerlink" title="不使用 + 、-求两个数的和 （含符号）"></a>不使用 + 、-求两个数的和 （含符号）</h1><p><strong>首先想到用位运算符来处理</strong></p>
+<ul>
+<li>^ 异或   可以理解为不进位的加法  如:  0010 ^ 0101 = 0111   0 + 0 = 0  | 1+1 = 0 | 1 + 0 = 1</li>
+<li>&amp; 按位与   </li>
+<li>&lt;&lt; 按位左移 </li>
+</ul>
+<h3 id="分析："><a href="#分析：" class="headerlink" title="分析："></a>分析：</h3><ol>
+<li>既然 ^ 异或可以得到不进位得值，那么再通过 &amp; 按位与取得需要进位的位， 再 &lt;&lt; 按位左移进位就可以取得进位的值</li>
+<li>将 <strong>没进位的和</strong> ^  <strong>进位</strong>  </li>
+<li>接着再进行以上的操作，<strong>没进位的和</strong> &amp; <strong>进位</strong>     直到 &amp; 的值为0时就代表没有进位了， 就返回 <strong>没进位的和</strong> ^  <strong>进位</strong>  的值</li>
+</ol>
+<h3 id="eg"><a href="#eg" class="headerlink" title="eg:"></a>eg:</h3><ol>
+<li>9 + 7 = 1001 +  0111</li>
+<li>s1 = 1001 ^ 0111 = 1110   |  1001 &amp; 0111 = 0001    |  j1 =  0001 &lt;&lt; 1 = 0010</li>
+<li>j2 = s1 &amp; j1 = 1110 &amp; 0010 = 0010  &lt;&lt;  1 = 0100 (还有进位，继续执行上述步骤)  s2 =  s1 ^ j1 = 1110 ^ 0010 = 1100</li>
+<li>J3 = j2 &amp; s2 = 0100 &amp; 1100 = 0100 &lt;&lt; 1 = 1000      s3 = j2 ^ s2 = 0100 ^ 1100 = 1000</li>
+<li>J4 = j3 &amp; s3 = 1000 &amp; 1000 = 1000 &lt;&lt; 1 = 10000    s4 = j3 ^ s3 = 1000 ^ 1000 = 0000</li>
+<li>j5 = j4 &amp; s4 = 1 000 &amp; 0000 = 0 0000   s5 = j4 ^ s4 = 1 0000 ^ 0 0000 = 1 0000 = 16</li>
+</ol>
+<h3 id="j-s-实现"><a href="#j-s-实现" class="headerlink" title="j s 实现"></a>j s 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> sum = a ^ b;</span><br><span class="line">    <span class="keyword">let</span> carry = (a&amp;b) &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(a&amp;b) &#123;</span><br><span class="line">        <span class="keyword">return</span> add(sum, carry);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add(<span class="number">10</span>, <span class="number">6</span>)  <span class="comment">// 16</span></span><br><span class="line">add(<span class="number">-2</span>, <span class="number">8</span>)  <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<h3 id="python-实现"><a href="#python-实现" class="headerlink" title="python 实现"></a>python 实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(a, b)</span>:</span></span><br><span class="line">	<span class="keyword">if</span>(b == <span class="number">0</span>):</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	sum = a ^ b</span><br><span class="line">	carry = (a &amp; b) &lt;&lt; <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> add(sum, carry)</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">nums = add(<span class="number">2</span>,<span class="number">99</span>) // <span class="number">101</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/10/前端知识点梳理   --part one/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -988,7 +1160,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1010,7 +1182,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

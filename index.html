@@ -312,6 +312,560 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/从零开始学习Vue源码(二) ——响应式基本原理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/01/从零开始学习Vue源码(二) ——响应式基本原理/" itemprop="url">从零开始学习Vue源码 ——响应式基本原理</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:55:23+08:00">
+                2020-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/01/从零开始学习Vue源码(二) ——响应式基本原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/从零开始学习Vue源码(二) ——响应式基本原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="从零开始学习Vue源码-——响应式基本原理"><a href="#从零开始学习Vue源码-——响应式基本原理" class="headerlink" title="从零开始学习Vue源码 ——响应式基本原理"></a>从零开始学习Vue源码 ——响应式基本原理</h1><h4 id="这里实现一个简易版本的响应式系统来形象的理解数据是如何在初始化的时候被劫持，以及如何在修改时更新视图的。"><a href="#这里实现一个简易版本的响应式系统来形象的理解数据是如何在初始化的时候被劫持，以及如何在修改时更新视图的。" class="headerlink" title="这里实现一个简易版本的响应式系统来形象的理解数据是如何在初始化的时候被劫持，以及如何在修改时更新视图的。"></a>这里实现一个简易版本的响应式系统来形象的理解数据是如何在初始化的时候被劫持，以及如何在修改时更新视图的。</h4><h3 id="首先看下Vue2-x实现响应式系统最重要的方法"><a href="#首先看下Vue2-x实现响应式系统最重要的方法" class="headerlink" title="首先看下Vue2.x实现响应式系统最重要的方法"></a>首先看下Vue2.x实现响应式系统最重要的方法</h3><p><code>Object.defineProperty</code>, Vue2.x就是基于它实现的响应式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    obj: 目标对象</span></span><br><span class="line"><span class="comment">    prop: 需要操作的目标对象的属性名</span></span><br><span class="line"><span class="comment">    descriptor: 描述符</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    return value 传入对象</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, prop, descriptor)</span><br></pre></td></tr></table></figure>
+<p>具体的属性以及使用方法可以参考<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">MDN</a></p>
+<h4 id="下面贴一个简易版响应式的代码实现"><a href="#下面贴一个简易版响应式的代码实现" class="headerlink" title="下面贴一个简易版响应式的代码实现"></a>下面贴一个简易版响应式的代码实现</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 更新视图时调用</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cb</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* 渲染视图 */</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"视图更新啦～"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对对象中某个属性进行数据劫持</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">        enumerable: <span class="literal">true</span>,       <span class="comment">/* 属性可枚举 */</span></span><br><span class="line">        configurable: <span class="literal">true</span>,     <span class="comment">/* 属性可被修改或删除 */</span></span><br><span class="line">        get: <span class="function"><span class="keyword">function</span> <span class="title">reactiveGetter</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> val;         <span class="comment">/* 实际上会依赖收集 */</span></span><br><span class="line">        &#125;,</span><br><span class="line">        set: <span class="function"><span class="keyword">function</span> <span class="title">reactiveSetter</span> (<span class="params">newVal</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (newVal === val) <span class="keyword">return</span>;</span><br><span class="line">            cb(newVal);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历对象所有属性，进行数据劫持</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!value || (<span class="keyword">typeof</span> value !== <span class="string">'object'</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">Object</span>.keys(value).forEach(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> value[key] === <span class="string">'object'</span>) &#123;</span><br><span class="line">            observer(value[key]) <span class="comment">// 递归遍历深层次属性</span></span><br><span class="line">        &#125;</span><br><span class="line">        defineReactive(value, key, value[key]);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vue</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="keyword">this</span>._data = option.data</span><br><span class="line">    observer(<span class="keyword">this</span>._data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    name: &#123;<span class="attr">firstName</span>: <span class="string">'z'</span>, <span class="attr">lastName</span>: <span class="string">'zz'</span>&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">vm._data.name.firstName = <span class="string">'cc'</span> <span class="comment">// 此时会打印 视图更新啦～</span></span><br></pre></td></tr></table></figure>
+<h5 id="下面我们一步步解析以上简易版响应式系统原理"><a href="#下面我们一步步解析以上简易版响应式系统原理" class="headerlink" title="下面我们一步步解析以上简易版响应式系统原理"></a>下面我们一步步解析以上简易版响应式系统原理</h5><ol>
+<li>首先我们要实现一个对对象属性进行数据劫持，跟踪属性更新的函数 <code>defineReactive</code>  ， 该函数使用了 <code>Object.defineProperty</code> 进行数据劫持, 被设置的属性会在读取时触发 <code>getter</code>,  会在设置时触发 <code>setter</code>    执行里面更新视图的函数 <code>cb</code> 打印出  <em>视图更新啦～</em></li>
+</ol>
+<ol start="2">
+<li>只有一个<code>defineReactive</code>还不够， 我们还需要实现一个 <code>observer</code>  来对对象所有属性遍历、递归进行绑定, 这样对象上所有属性修改时都会触发getter 、 setter。</li>
+<li>最后我们构建一个Vue 的class类， 在构造函数中初始化data，并进行<strong>[响应式]</strong> 化</li>
+<li>当实例化Vue后，我们修改_data上的值就会触发setter 更新视图</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>响应式系统最重要的就是数据劫持部分，当然这里只是一个简单的实现，像数组对象等都没处理，不过能通过这个demo了解相应式的基本原理。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/从零开始学习Vue源码(一) —— 概览/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/" itemprop="url">从零开始学习Vue源码 —— 概览</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:50:23+08:00">
+                2020-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/从零开始学习Vue源码(一) —— 概览/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="从零开始学习Vue源码-——-概览"><a href="#从零开始学习Vue源码-——-概览" class="headerlink" title="从零开始学习Vue源码 —— 概览"></a>从零开始学习Vue源码 —— 概览</h1><p>先上一张图</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim" alt=""></p>
+<p>以上流程包括了从：</p>
+<blockquote>
+<p>初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图</p>
+</blockquote>
+<p>响应式更新包括了:</p>
+<blockquote>
+<p>在init时进行了<code>Object.defineProperty</code> 的绑定 —— render function渲染读取值，触发getter函数 —— 进行依赖收集 —— 修改对象值触发setter函数 —— 通知<strong>[依赖收集]</strong>中Dep的每个 watcher 值变化了，需要更新视图 —— watcher调用 <code>update</code>来更新视图 ——  将新、旧VNode传入patch进行diff比较，只修改比较得出的差异的部分Dom</p>
+</blockquote>
+<h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><p>在 <code>new Vue()</code>  之后， 会进行一系列的初始化操作，包括初始化 <strong>生命周期</strong> 、 <strong>事件</strong>、<strong>props</strong> 、 <strong>methods</strong> 、 <strong>data</strong> 、 <strong>computed</strong> 、 <strong>watch</strong> 等。 最重要的是进行 <code>Object.defineProperty</code> 的绑定，用于实现 <strong>[响应式]</strong> 和 <strong>[依赖收集]</strong> </p>
+<h2 id="mount"><a href="#mount" class="headerlink" title="$mount"></a>$mount</h2><p>在初始化之后就会进行组件的挂载</p>
+<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><p>如果是运行时会进行<code>template</code>模版的编译， 包括 ：</p>
+<ul>
+<li><strong>parse</strong> ——  使用正则解析模版中的指令、class、style等 ， 形成AST (抽象语法树)</li>
+<li><strong>optimize</strong> —— 标记 static 静态节点，用于后面<code>update</code> 时 <code>patch</code> 执行diff算法对静态节点跳过，从而优化性能</li>
+<li><strong>generate</strong> —— 将AST转换为 render function， 包括 render字符串 和 staticRenderFns字符串</li>
+</ul>
+<p>经过以上步骤之后，就会生产用于渲染VNode的 render function</p>
+<h2 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h2><p>Render function 转换为Vnode节点，最终形成 virtual Dom Tree ，最后虚拟Dom渲染得到真实Dom</p>
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><p>render function被渲染时会读取 <strong>Init</strong>时绑定的值，就会触发 getter函数进行 <strong>[依赖收集]</strong> </p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/12/21/160770b2a77e084e?imageView2" alt=""></p>
+<p> <strong>[依赖收集]</strong> 是为了将观察者watcher对象存放到订阅者Dep的subs中</p>
+<p>在修改对象值时会触发setter函数，通知之前依赖收集dep中的每个watcher值发生改变了，紧接着，watcher就会调用 <code>update</code>来更新视图</p>
+<p><em>关于setter为什么要通知dep中的每个watch，这里引用一段网友的解释:</em></p>
+<blockquote>
+<p>通知所有的watcher是指对应的dep保存的所有watcher。进行数据劫持的时候，循环遍历data中所有的属性，一个属性就会创建一个唯一的dep,当初始化解析编译界面的时候，一个指令/表达式就是一个watcher,那么解析指令/表达式的值的时候就去读data中的属性，触发getter，再触发添加dep添加订阅（将watcher添加到dep.subs中），当修改对应的属性的时候，触发setter，那么就再去触发这个dep保存的所有watcher</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上大概梳理呢Vue整个运行机制，后续会针对每个大板块，小功能进行更细致化的分析。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/react  知识点/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/01/react  知识点/" itemprop="url">react hooks知识点</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:48:23+08:00">
+                2020-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/01/react  知识点/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/react  知识点/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="react-知识点-hooks-class"><a href="#react-知识点-hooks-class" class="headerlink" title="react  知识点(hooks, class)"></a>react  知识点(hooks, class)</h2><h3 id="1-usecallback"><a href="#1-usecallback" class="headerlink" title="1. usecallback"></a>1. usecallback</h3><blockquote>
+<p>缓存函数，依赖项变化后再重新生成.</p>
+<p><a href="https://react.docschina.org/docs/hooks-reference.html#usecallback" target="_blank" rel="noopener"><code>useCallback</code></a> Hook 允许你在重新渲染之间保持对相同的回调引用以使得 <code>shouldComponentUpdate</code> 继续工作</p>
+<p>当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 <code>xxxRef.current</code> 上把所依赖的变量写入xxxref， usecallback依赖 xxxRef， 因为xxxref只会创建一次，且xxxref.current始终是最新的，所以可以解决依赖项频繁变更的问题并且可以完成函数的缓存。</p>
+</blockquote>
+<h3 id="2-memo"><a href="#2-memo" class="headerlink" title="2.memo"></a>2.memo</h3><blockquote>
+<p>子组件 props不变的情况下，父组件重新渲染子组件并<strong>不会</strong>重新渲染</p>
+</blockquote>
+<h3 id="3-useMemo"><a href="#3-useMemo" class="headerlink" title="3. useMemo"></a>3. useMemo</h3><blockquote>
+<p>缓存值，当依赖项变化时，才会重新计算生成最新值</p>
+</blockquote>
+<h3 id="4-PureComponent"><a href="#4-PureComponent" class="headerlink" title="4.PureComponent"></a>4.PureComponent</h3><blockquote>
+<p>同memo， 通过class继承的方式实现子组件<strong>不因为</strong>父组件更新而进行不必要的渲染。，只依赖props</p>
+</blockquote>
+<h4 id="为什么不每个组件都用memo或者pureComponent包装呢？"><a href="#为什么不每个组件都用memo或者pureComponent包装呢？" class="headerlink" title="为什么不每个组件都用memo或者pureComponent包装呢？"></a>为什么不每个组件都用memo或者pureComponent包装呢？</h4><p>​    react决定组件是否更新是根据 <strong>前后props</strong> 来比较的，但比较也仅仅只是<strong>潜比较</strong> ， 只能比较值的不同，如果是引用，比如对象、数组等就无能为力老。 所以，如果props是引用类型，父组件每次更新，传递的引用对象都是新生成的，地址空间已经变了，所以子组件经过潜比较判断前后的prop是不相等的，就会造成子组件重新渲染。 同样， 传递的箭头函数(匿名函数)也会造成相同的后果。 那我们如何规避这种情况呢？</p>
+<ul>
+<li>拆分props传入的应用对象，拆分为单个的值</li>
+<li>函数传入唯一声明的函数引用。 比如在class中传入 <code> xxxxfn.bind(this)</code>的函数</li>
+<li>控制更新。 使用class的 <code>shouldComponentUpdate(prevProps, prevState)</code>  或者memo的 第二个参数来对前后props进行更深层次的比较，从而控制更新。</li>
+</ul>
+<h3 id="5-useReduce"><a href="#5-useReduce" class="headerlink" title="5. useReduce"></a>5. useReduce</h3><blockquote>
+<p><a href="https://react.docschina.org/docs/hooks-reference.html#usereducer" target="_blank" rel="noopener"><code>useReducer</code></a> Hook 减少了对深层传递回调的依赖，</p>
+</blockquote>
+<h3 id="6-useContext"><a href="#6-useContext" class="headerlink" title="6. useContext"></a>6. useContext</h3><blockquote>
+<p>用于解决组件深层次嵌套的通信问题</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/19/不使用 + 、-求两个数的和 （含符号）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1160,7 +1714,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1171,7 +1725,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1182,7 +1736,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

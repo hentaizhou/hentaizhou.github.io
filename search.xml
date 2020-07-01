@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[从零开始学习Vue源码 ——响应式基本原理]]></title>
+    <url>%2F2020%2F07%2F01%2F%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0Vue%E6%BA%90%E7%A0%81(%E4%BA%8C)%20%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[从零开始学习Vue源码 ——响应式基本原理这里实现一个简易版本的响应式系统来形象的理解数据是如何在初始化的时候被劫持，以及如何在修改时更新视图的。首先看下Vue2.x实现响应式系统最重要的方法Object.defineProperty, Vue2.x就是基于它实现的响应式 12345678/* obj: 目标对象 prop: 需要操作的目标对象的属性名 descriptor: 描述符 return value 传入对象*/Object.defineProperty(obj, prop, descriptor) 具体的属性以及使用方法可以参考MDN 下面贴一个简易版响应式的代码实现12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849// 更新视图时调用function cb (val) &#123; /* 渲染视图 */ console.log("视图更新啦～");&#125;// 对对象中某个属性进行数据劫持function defineReactive (obj, key, val) &#123; Object.defineProperty(obj, key, &#123; enumerable: true, /* 属性可枚举 */ configurable: true, /* 属性可被修改或删除 */ get: function reactiveGetter () &#123; return val; /* 实际上会依赖收集 */ &#125;, set: function reactiveSetter (newVal) &#123; if (newVal === val) return; cb(newVal); &#125; &#125;);&#125;// 遍历对象所有属性，进行数据劫持function observer (value) &#123; if (!value || (typeof value !== 'object')) &#123; return; &#125; Object.keys(value).forEach((key) =&gt; &#123; if(typeof value[key] === 'object') &#123; observer(value[key]) // 递归遍历深层次属性 &#125; defineReactive(value, key, value[key]); &#125;);&#125;class Vue &#123; constructor(options) &#123; this._data = option.data observer(this._data); &#125;&#125;const vm = new Vue(&#123; data: &#123; name: &#123;firstName: 'z', lastName: 'zz'&#125; &#125;&#125;)vm._data.name.firstName = 'cc' // 此时会打印 视图更新啦～ 下面我们一步步解析以上简易版响应式系统原理 首先我们要实现一个对对象属性进行数据劫持，跟踪属性更新的函数 defineReactive ， 该函数使用了 Object.defineProperty 进行数据劫持, 被设置的属性会在读取时触发 getter, 会在设置时触发 setter 执行里面更新视图的函数 cb 打印出 视图更新啦～ 只有一个defineReactive还不够， 我们还需要实现一个 observer 来对对象所有属性遍历、递归进行绑定, 这样对象上所有属性修改时都会触发getter 、 setter。 最后我们构建一个Vue 的class类， 在构造函数中初始化data，并进行[响应式] 化 当实例化Vue后，我们修改_data上的值就会触发setter 更新视图 总结响应式系统最重要的就是数据劫持部分，当然这里只是一个简单的实现，像数组对象等都没处理，不过能通过这个demo了解相应式的基本原理。]]></content>
+      <categories>
+        <category>javascript</category>
+        <category>vue</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[从零开始学习Vue源码 —— 概览]]></title>
+    <url>%2F2020%2F07%2F01%2F%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E6%A6%82%E8%A7%88%2F</url>
+    <content type="text"><![CDATA[从零开始学习Vue源码 —— 概览先上一张图 以上流程包括了从： 初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 —— render function转换为VNode节点最终形成Virtual Dom Tree —— virtual dom tree转化为真实Dom节点从而渲染视图 响应式更新包括了: 在init时进行了Object.defineProperty 的绑定 —— render function渲染读取值，触发getter函数 —— 进行依赖收集 —— 修改对象值触发setter函数 —— 通知[依赖收集]中Dep的每个 watcher 值变化了，需要更新视图 —— watcher调用 update来更新视图 —— 将新、旧VNode传入patch进行diff比较，只修改比较得出的差异的部分Dom init在 new Vue() 之后， 会进行一系列的初始化操作，包括初始化 生命周期 、 事件、props 、 methods 、 data 、 computed 、 watch 等。 最重要的是进行 Object.defineProperty 的绑定，用于实现 [响应式] 和 [依赖收集] $mount在初始化之后就会进行组件的挂载 compile如果是运行时会进行template模版的编译， 包括 ： parse —— 使用正则解析模版中的指令、class、style等 ， 形成AST (抽象语法树) optimize —— 标记 static 静态节点，用于后面update 时 patch 执行diff算法对静态节点跳过，从而优化性能 generate —— 将AST转换为 render function， 包括 render字符串 和 staticRenderFns字符串 经过以上步骤之后，就会生产用于渲染VNode的 render function Virtual DOMRender function 转换为Vnode节点，最终形成 virtual Dom Tree ，最后虚拟Dom渲染得到真实Dom 响应式render function被渲染时会读取 Init时绑定的值，就会触发 getter函数进行 [依赖收集] [依赖收集] 是为了将观察者watcher对象存放到订阅者Dep的subs中 在修改对象值时会触发setter函数，通知之前依赖收集dep中的每个watcher值发生改变了，紧接着，watcher就会调用 update来更新视图 关于setter为什么要通知dep中的每个watch，这里引用一段网友的解释: 通知所有的watcher是指对应的dep保存的所有watcher。进行数据劫持的时候，循环遍历data中所有的属性，一个属性就会创建一个唯一的dep,当初始化解析编译界面的时候，一个指令/表达式就是一个watcher,那么解析指令/表达式的值的时候就去读data中的属性，触发getter，再触发添加dep添加订阅（将watcher添加到dep.subs中），当修改对应的属性的时候，触发setter，那么就再去触发这个dep保存的所有watcher 总结以上大概梳理呢Vue整个运行机制，后续会针对每个大板块，小功能进行更细致化的分析。]]></content>
+      <categories>
+        <category>javascript</category>
+        <category>vue</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[react hooks知识点]]></title>
+    <url>%2F2020%2F07%2F01%2Freact%20%20%E7%9F%A5%E8%AF%86%E7%82%B9%2F</url>
+    <content type="text"><![CDATA[react 知识点(hooks, class)1. usecallback 缓存函数，依赖项变化后再重新生成. useCallback Hook 允许你在重新渲染之间保持对相同的回调引用以使得 shouldComponentUpdate 继续工作 当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 xxxRef.current 上把所依赖的变量写入xxxref， usecallback依赖 xxxRef， 因为xxxref只会创建一次，且xxxref.current始终是最新的，所以可以解决依赖项频繁变更的问题并且可以完成函数的缓存。 2.memo 子组件 props不变的情况下，父组件重新渲染子组件并不会重新渲染 3. useMemo 缓存值，当依赖项变化时，才会重新计算生成最新值 4.PureComponent 同memo， 通过class继承的方式实现子组件不因为父组件更新而进行不必要的渲染。，只依赖props 为什么不每个组件都用memo或者pureComponent包装呢？​ react决定组件是否更新是根据 前后props 来比较的，但比较也仅仅只是潜比较 ， 只能比较值的不同，如果是引用，比如对象、数组等就无能为力老。 所以，如果props是引用类型，父组件每次更新，传递的引用对象都是新生成的，地址空间已经变了，所以子组件经过潜比较判断前后的prop是不相等的，就会造成子组件重新渲染。 同样， 传递的箭头函数(匿名函数)也会造成相同的后果。 那我们如何规避这种情况呢？ 拆分props传入的应用对象，拆分为单个的值 函数传入唯一声明的函数引用。 比如在class中传入 xxxxfn.bind(this)的函数 控制更新。 使用class的 shouldComponentUpdate(prevProps, prevState) 或者memo的 第二个参数来对前后props进行更深层次的比较，从而控制更新。 5. useReduce useReducer Hook 减少了对深层传递回调的依赖， 6. useContext 用于解决组件深层次嵌套的通信问题]]></content>
+      <categories>
+        <category>javascript</category>
+        <category>react</category>
+      </categories>
+      <tags>
+        <tag>react</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[不使用 + 、-求两个数的和 （含符号）]]></title>
     <url>%2F2020%2F06%2F19%2F%E4%B8%8D%E4%BD%BF%E7%94%A8%20%2B%20%E3%80%81-%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E5%92%8C%20%EF%BC%88%E5%90%AB%E7%AC%A6%E5%8F%B7%EF%BC%89%2F</url>
     <content type="text"><![CDATA[不使用 + 、-求两个数的和 （含符号）首先想到用位运算符来处理 ^ 异或 可以理解为不进位的加法 如: 0010 ^ 0101 = 0111 0 + 0 = 0 | 1+1 = 0 | 1 + 0 = 1 &amp; 按位与 &lt;&lt; 按位左移 分析： 既然 ^ 异或可以得到不进位得值，那么再通过 &amp; 按位与取得需要进位的位， 再 &lt;&lt; 按位左移进位就可以取得进位的值 将 没进位的和 ^ 进位 接着再进行以上的操作，没进位的和 &amp; 进位 直到 &amp; 的值为0时就代表没有进位了， 就返回 没进位的和 ^ 进位 的值 eg: 9 + 7 = 1001 + 0111 s1 = 1001 ^ 0111 = 1110 | 1001 &amp; 0111 = 0001 | j1 = 0001 &lt;&lt; 1 = 0010 j2 = s1 &amp; j1 = 1110 &amp; 0010 = 0010 &lt;&lt; 1 = 0100 (还有进位，继续执行上述步骤) s2 = s1 ^ j1 = 1110 ^ 0010 = 1100 J3 = j2 &amp; s2 = 0100 &amp; 1100 = 0100 &lt;&lt; 1 = 1000 s3 = j2 ^ s2 = 0100 ^ 1100 = 1000 J4 = j3 &amp; s3 = 1000 &amp; 1000 = 1000 &lt;&lt; 1 = 10000 s4 = j3 ^ s3 = 1000 ^ 1000 = 0000 j5 = j4 &amp; s4 = 1 000 &amp; 0000 = 0 0000 s5 = j4 ^ s4 = 1 0000 ^ 0 0000 = 1 0000 = 16 j s 实现123456789101112let add = function(a,b) &#123; let sum = a ^ b; let carry = (a&amp;b) &lt;&lt; 1; if(a&amp;b) &#123; return add(sum, carry); &#125; else &#123; return sum; &#125;&#125;add(10, 6) // 16add(-2, 8) // 6 python 实现1234567891011#!/usr/bin/python3def add(a, b): if(b == 0): return a sum = a ^ b carry = (a &amp; b) &lt;&lt; 1 return add(sum, carry) nums = add(2,99) // 101]]></content>

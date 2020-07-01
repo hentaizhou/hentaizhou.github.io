@@ -79,7 +79,7 @@
 
 
 
-  <meta name="keywords" content="zhiweizhou,blog,Hexo,NexT">
+  <meta name="keywords" content="vue,">
 
 
 
@@ -90,14 +90,21 @@
 
 
 
-<meta name="keywords" content="blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="深夜杂记">
-<meta property="og:url" content="http://yoursite.com/archives/2020/04/index.html">
+<meta name="description" content="从零开始学习Vue源码 —— 概览先上一张图  以上流程包括了从：  初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图  响应式更新包括了:  在init时进行了Object.defineProperty 的绑定 ——">
+<meta name="keywords" content="vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零开始学习Vue源码 —— 概览">
+<meta property="og:url" content="http://yoursite.com/2020/07/01/从零开始学习Vue源码(一) —— 概览/index.html">
 <meta property="og:site_name" content="深夜杂记">
+<meta property="og:description" content="从零开始学习Vue源码 —— 概览先上一张图  以上流程包括了从：  初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图  响应式更新包括了:  在init时进行了Object.defineProperty 的绑定 ——">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/12/21/160770b2a77e084e?imageView2">
+<meta property="og:updated_time" content="2020-07-01T15:49:41.698Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深夜杂记">
+<meta name="twitter:title" content="从零开始学习Vue源码 —— 概览">
+<meta name="twitter:description" content="从零开始学习Vue源码 —— 概览先上一张图  以上流程包括了从：  初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图  响应式更新包括了:  在init时进行了Object.defineProperty 的绑定 ——">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim">
 
 
 
@@ -127,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2020/04/">
+  <link rel="canonical" href="http://yoursite.com/2020/07/01/从零开始学习Vue源码(一) —— 概览/">
 
 
 
@@ -142,7 +149,7 @@
   daovoice('update');
   </script>
 
-  <title>Archive | 深夜杂记</title>
+  <title>从零开始学习Vue源码 —— 概览 | 深夜杂记</title>
   
 
 
@@ -161,7 +168,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -297,72 +304,222 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        Um..! 8 posts in total. Keep on posting.
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2020">2020</h2>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/从零开始学习Vue源码(一) —— 概览/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2020/04/07/blob2pic/" itemprop="url">
-              
-                <span itemprop="name">二进制流转图片</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">从零开始学习Vue源码 —— 概览</h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-04-07T23:36:23+08:00" content="2020-04-07">
-          04-07
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:50:23+08:00">
+                2020-07-01
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/vue/" itemprop="url" rel="index">
+                    <span itemprop="name">vue</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/从零开始学习Vue源码(一) —— 概览/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
 
       
+      
 
+      
+        <h1 id="从零开始学习Vue源码-——-概览"><a href="#从零开始学习Vue源码-——-概览" class="headerlink" title="从零开始学习Vue源码 —— 概览"></a>从零开始学习Vue源码 —— 概览</h1><p>先上一张图</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim" alt=""></p>
+<p>以上流程包括了从：</p>
+<blockquote>
+<p>初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图</p>
+</blockquote>
+<p>响应式更新包括了:</p>
+<blockquote>
+<p>在init时进行了<code>Object.defineProperty</code> 的绑定 —— render function渲染读取值，触发getter函数 —— 进行依赖收集 —— 修改对象值触发setter函数 —— 通知<strong>[依赖收集]</strong>中Dep的每个 watcher 值变化了，需要更新视图 —— watcher调用 <code>update</code>来更新视图 ——  将新、旧VNode传入patch进行diff比较，只修改比较得出的差异的部分Dom</p>
+</blockquote>
+<h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><p>在 <code>new Vue()</code>  之后， 会进行一系列的初始化操作，包括初始化 <strong>生命周期</strong> 、 <strong>事件</strong>、<strong>props</strong> 、 <strong>methods</strong> 、 <strong>data</strong> 、 <strong>computed</strong> 、 <strong>watch</strong> 等。 最重要的是进行 <code>Object.defineProperty</code> 的绑定，用于实现 <strong>[响应式]</strong> 和 <strong>[依赖收集]</strong> </p>
+<h2 id="mount"><a href="#mount" class="headerlink" title="$mount"></a>$mount</h2><p>在初始化之后就会进行组件的挂载</p>
+<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><p>如果是运行时会进行<code>template</code>模版的编译， 包括 ：</p>
+<ul>
+<li><strong>parse</strong> ——  使用正则解析模版中的指令、class、style等 ， 形成AST (抽象语法树)</li>
+<li><strong>optimize</strong> —— 标记 static 静态节点，用于后面<code>update</code> 时 <code>patch</code> 执行diff算法对静态节点跳过，从而优化性能</li>
+<li><strong>generate</strong> —— 将AST转换为 render function， 包括 render字符串 和 staticRenderFns字符串</li>
+</ul>
+<p>经过以上步骤之后，就会生产用于渲染VNode的 render function</p>
+<h2 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h2><p>Render function 转换为Vnode节点，最终形成 virtual Dom Tree ，最后虚拟Dom渲染得到真实Dom</p>
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><p>render function被渲染时会读取 <strong>Init</strong>时绑定的值，就会触发 getter函数进行 <strong>[依赖收集]</strong> </p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/12/21/160770b2a77e084e?imageView2" alt=""></p>
+<p> <strong>[依赖收集]</strong> 是为了将观察者watcher对象存放到订阅者Dep的subs中</p>
+<p>在修改对象值时会触发setter函数，通知之前依赖收集dep中的每个watcher值发生改变了，紧接着，watcher就会调用 <code>update</code>来更新视图</p>
+<p><em>关于setter为什么要通知dep中的每个watch，这里引用一段网友的解释:</em></p>
+<blockquote>
+<p>通知所有的watcher是指对应的dep保存的所有watcher。进行数据劫持的时候，循环遍历data中所有的属性，一个属性就会创建一个唯一的dep,当初始化解析编译界面的时候，一个指令/表达式就是一个watcher,那么解析指令/表达式的值的时候就去读data中的属性，触发getter，再触发添加dep添加订阅（将watcher添加到dep.subs中），当修改对应的属性的时候，触发setter，那么就再去触发这个dep保存的所有watcher</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上大概梳理呢Vue整个运行机制，后续会针对每个大板块，小功能进行更细致化的分析。</p>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag"><i class="fa fa-tag"></i> vue</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/01/react  知识点/" rel="next" title="react hooks知识点">
+                <i class="fa fa-chevron-left"></i> react hooks知识点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/01/从零开始学习Vue源码(二) ——响应式基本原理/" rel="prev" title="从零开始学习Vue源码 ——响应式基本原理">
+                从零开始学习Vue源码 ——响应式基本原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -370,6 +527,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -390,8 +554,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -475,6 +648,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从零开始学习Vue源码-——-概览"><span class="nav-number">1.</span> <span class="nav-text">从零开始学习Vue源码 —— 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init"><span class="nav-number">1.1.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mount"><span class="nav-number">1.2.</span> <span class="nav-text">$mount</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-DOM"><span class="nav-number">1.4.</span> <span class="nav-text">Virtual DOM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式"><span class="nav-number">1.5.</span> <span class="nav-text">响应式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -626,6 +815,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

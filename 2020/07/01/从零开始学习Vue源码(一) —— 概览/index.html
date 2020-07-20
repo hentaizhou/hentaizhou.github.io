@@ -100,7 +100,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/12/21/160770b2a77e084e?imageView2">
-<meta property="og:updated_time" content="2020-07-01T15:49:41.698Z">
+<meta property="og:updated_time" content="2020-07-20T14:58:23.800Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从零开始学习Vue源码 —— 概览">
 <meta name="twitter:description" content="从零开始学习Vue源码 —— 概览先上一张图  以上流程包括了从：  初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图  响应式更新包括了:  在init时进行了Object.defineProperty 的绑定 ——">
@@ -438,6 +438,7 @@
 <blockquote>
 <p>在init时进行了<code>Object.defineProperty</code> 的绑定 —— render function渲染读取值，触发getter函数 —— 进行依赖收集 —— 修改对象值触发setter函数 —— 通知<strong>[依赖收集]</strong>中Dep的每个 watcher 值变化了，需要更新视图 —— watcher调用 <code>update</code>来更新视图 ——  将新、旧VNode传入patch进行diff比较，只修改比较得出的差异的部分Dom</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><p>在 <code>new Vue()</code>  之后， 会进行一系列的初始化操作，包括初始化 <strong>生命周期</strong> 、 <strong>事件</strong>、<strong>props</strong> 、 <strong>methods</strong> 、 <strong>data</strong> 、 <strong>computed</strong> 、 <strong>watch</strong> 等。 最重要的是进行 <code>Object.defineProperty</code> 的绑定，用于实现 <strong>[响应式]</strong> 和 <strong>[依赖收集]</strong> </p>
 <h2 id="mount"><a href="#mount" class="headerlink" title="$mount"></a>$mount</h2><p>在初始化之后就会进行组件的挂载</p>
 <h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><p>如果是运行时会进行<code>template</code>模版的编译， 包括 ：</p>
@@ -579,7 +580,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -601,7 +602,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

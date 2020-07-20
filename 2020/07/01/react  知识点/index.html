@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="深夜杂记">
 <meta property="og:description" content="react  知识点(hooks, class)1. usecallback 缓存函数，依赖项变化后再重新生成. useCallback Hook 允许你在重新渲染之间保持对相同的回调引用以使得 shouldComponentUpdate 继续工作 当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 xxxRef.current 上把所依赖的变量写入xxxref， usecallbac">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-01T15:48:37.735Z">
+<meta property="og:updated_time" content="2020-07-20T14:58:08.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="react hooks知识点">
 <meta name="twitter:description" content="react  知识点(hooks, class)1. usecallback 缓存函数，依赖项变化后再重新生成. useCallback Hook 允许你在重新渲染之间保持对相同的回调引用以使得 shouldComponentUpdate 继续工作 当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 xxxRef.current 上把所依赖的变量写入xxxref， usecallbac">
@@ -430,6 +430,7 @@
 <p><a href="https://react.docschina.org/docs/hooks-reference.html#usecallback" target="_blank" rel="noopener"><code>useCallback</code></a> Hook 允许你在重新渲染之间保持对相同的回调引用以使得 <code>shouldComponentUpdate</code> 继续工作</p>
 <p>当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 <code>xxxRef.current</code> 上把所依赖的变量写入xxxref， usecallback依赖 xxxRef， 因为xxxref只会创建一次，且xxxref.current始终是最新的，所以可以解决依赖项频繁变更的问题并且可以完成函数的缓存。</p>
 </blockquote>
+<a id="more"></a>
 <h3 id="2-memo"><a href="#2-memo" class="headerlink" title="2.memo"></a>2.memo</h3><blockquote>
 <p>子组件 props不变的情况下，父组件重新渲染子组件并<strong>不会</strong>重新渲染</p>
 </blockquote>
@@ -573,7 +574,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -595,7 +596,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

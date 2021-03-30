@@ -90,19 +90,19 @@
 
 
 
-<meta name="description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。  异步当执行 js 过程中遇到比较耗时的操作时， js 会采用异步的方式， 比如网络请求，定时器等。当发出请求或者调用定时器后，不会阻塞当前代码执行，">
+<meta name="description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。">
 <meta name="keywords" content="javascript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="同步、异步、任务队列">
 <meta property="og:url" content="http://yoursite.com/2021/03/30/同步、异步、任务队列/index.html">
 <meta property="og:site_name" content="深夜杂记">
-<meta property="og:description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。  异步当执行 js 过程中遇到比较耗时的操作时， js 会采用异步的方式， 比如网络请求，定时器等。当发出请求或者调用定时器后，不会阻塞当前代码执行，">
+<meta property="og:description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.ruanyifeng.com/blogimg/asset/2014/bg2014100802.png">
-<meta property="og:updated_time" content="2021-03-30T03:52:48.381Z">
+<meta property="og:updated_time" content="2021-03-30T06:57:19.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="同步、异步、任务队列">
-<meta name="twitter:description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。  异步当执行 js 过程中遇到比较耗时的操作时， js 会采用异步的方式， 比如网络请求，定时器等。当发出请求或者调用定时器后，不会阻塞当前代码执行，">
+<meta name="twitter:description" content="JS 同步、异步、任务队列 浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。">
 <meta name="twitter:image" content="http://www.ruanyifeng.com/blogimg/asset/2014/bg2014100802.png">
 
 
@@ -419,6 +419,7 @@
         <h1 id="JS-同步、异步、任务队列"><a href="#JS-同步、异步、任务队列" class="headerlink" title="JS 同步、异步、任务队列"></a>JS 同步、异步、任务队列</h1><blockquote>
 <p>浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。</p>
 </blockquote>
+<a id="more"></a>
 <h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>当执行 js 过程中遇到比较耗时的操作时， js 会采用异步的方式， 比如网络请求，定时器等。当发出请求或者调用定时器后，不会阻塞当前代码执行，而是会往后继续执行， 最终当网络请求数据回来后，或者定时器计时完毕后，会调用事先传入的回调函数。</p>
 <p>举个例子: </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'1'</span>)</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2'</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'3'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a(); <span class="comment">// 依次打印 1 - 3 - 2</span></span><br></pre></td></tr></table></figure>

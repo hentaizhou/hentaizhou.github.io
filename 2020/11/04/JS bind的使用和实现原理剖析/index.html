@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="深夜杂记">
 <meta property="og:description" content="JS bind的使用和实现原理剖析123456789var obj = &amp;#123;name: &apos;jeff&apos;&amp;#125;var fn = function(arg1, arg2) &amp;#123;  console.log(&apos;args==&amp;gt;&apos;, [arg1, arg2], &apos;name==&amp;gt;&apos;, this.name)&amp;#125;var bindFn = fn.bind(obj, &apos;arg1&apos;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-11-04T15:30:30.492Z">
+<meta property="og:updated_time" content="2021-03-30T06:56:45.362Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS bind的使用和实现原理剖析">
 <meta name="twitter:description" content="JS bind的使用和实现原理剖析123456789var obj = &amp;#123;name: &apos;jeff&apos;&amp;#125;var fn = function(arg1, arg2) &amp;#123;  console.log(&apos;args==&amp;gt;&apos;, [arg1, arg2], &apos;name==&amp;gt;&apos;, this.name)&amp;#125;var bindFn = fn.bind(obj, &apos;arg1&apos;">
@@ -421,6 +421,7 @@
 <li>通过bind将参数传递给函数<code>fn</code></li>
 <li>返回一个新函数</li>
 </ol>
+<a id="more"></a>
 <p><em>通过 <code>fn.bind(obj, &#39;arg1&#39;)</code> 将函数<code>fn</code>的this指向obj， 同时将 ‘arg1’ 作为 bind 的第二个参数传递给函数 <code>fn</code>， 并返回新函数 <code>bindFn</code>   。 此时调用 <code>bindFn</code>  并传入参数作为 fn 的第二个参数，执行结果依次是打印 arg1 、 arg2、jeff</em></p>
 <h3 id="实现一个bind"><a href="#实现一个bind" class="headerlink" title="实现一个bind"></a>实现一个bind</h3><p>如果要实现bind， 我们根据其使用方式总结出如下几点：</p>
 <ol>

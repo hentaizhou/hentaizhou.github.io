@@ -312,6 +312,390 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/30/ThreeJs基础概念/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/30/ThreeJs基础概念/" itemprop="url">ThreeJs基础概念</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-30T11:53:10+08:00">
+                2021-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ThreeJs/" itemprop="url" rel="index">
+                    <span itemprop="name">ThreeJs</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/03/30/ThreeJs基础概念/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/03/30/ThreeJs基础概念/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="three-js-基础概念"><a href="#three-js-基础概念" class="headerlink" title="three.js  基础概念"></a>three.js  基础概念</h1><blockquote>
+<p>Three.js 是基于webgl的二次封装。将webgl繁杂的api封装成较为简洁、面向对象的方式。threejs提供了几个基本对象让我们很方便的构建一个3D应用，分别是 <strong>场景</strong> 、 <strong>相机</strong>、 <strong>渲染器</strong> 。</p>
+<p>场景就是呈现图形画面的空间、相机可以理解为观察拍摄图形画面的方式、渲染器则是将画面渲染到屏幕上。</p>
+<p>我们将从以上三个对象出发，了解threejs如何绘制一个基础的3D图形</p>
+</blockquote>
+<h3 id="场景、相机"><a href="#场景、相机" class="headerlink" title="场景、相机"></a>场景、相机</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene();</span><br><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera( <span class="number">75</span>, <span class="built_in">window</span>.innerWidth / <span class="built_in">window</span>.innerHeight, <span class="number">0.1</span>, <span class="number">1000</span> );</span><br></pre></td></tr></table></figure>
+<p>以上代码新建了一个场景和透视相机，主要看下相机这一部分。</p>
+<h4 id="相机详解"><a href="#相机详解" class="headerlink" title="相机详解"></a>相机详解</h4><p>​    three.js 内置了多种相机，使用最普遍的是透视相机（PerspectiveCamera）和正交相机 （OrthographicCamera）</p>
+<p>​    相机都是使用右手坐标系：</p>
+<p>​    <img src="https://bkimg.cdn.bcebos.com/pic/08f790529822720e84007b1870cb0a46f31fab02?x-bce-process=image/resize,m_lfit,w_640,limit_1" alt=""></p>
+<h5 id="透视相机"><a href="#透视相机" class="headerlink" title="透视相机"></a>透视相机</h5><p>透视相机观察的效果更人眼一样，观察物体时是 <strong>近大远小</strong> 的效果， 如下图所示：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/12/25/167e5f89cca8dd1f?imageView2/0/w/1280/h/960/format/" alt=""></p>
+<p><code>new THREE.PerspectiveCamera(fov, aspect, near, far)</code> 该api为新建一个透视相机，相应的参数分别代表</p>
+<ul>
+<li><code>fov</code>表示视角；</li>
+<li><code>aspect</code>表示裁切面宽高比；</li>
+<li><code>near</code>表示近平面距离；</li>
+<li><code>far</code>表示远平面距离；</li>
+</ul>
+<blockquote>
+<p>只有离相机的距离大于<code>near</code>且小于<code>far</code>，另外还得在相机视角(fov)内的物体，才能被相机观察到从而被渲染器渲染出来；</p>
+</blockquote>
+<h5 id="正交相机"><a href="#正交相机" class="headerlink" title="正交相机"></a>正交相机</h5><p>正交相机观测的物体不管离物体距离远近，渲染出来都是一个大小</p>
+<p><img src="https://www.ituring.com.cn/download/01YiZI4zr57Q.small" alt=""></p>
+<p><code>THREE.OrthographicCamera(left, right, top, bottom, near, far)</code></p>
+<p>这六个参数分别代表正交投影照相机拍摄到的空间的六个面的位置，这六个面围成一个长方体，我们称其为<strong>视景体</strong>（Frustum）。只有在视景体内部（下图中的灰色部分）的物体才可能显示在屏幕上，而视景体外的物体会在显示之前被裁减掉。</p>
+<p>为了保持照相机的横竖比例，需要保证<code>(right - left)</code>与<code>(top - bottom)</code>的比例与Canvas宽度与高度的比例一致。</p>
+<p>同时<code>near</code>与<code>far</code>都是指到照相机位置在深度平面的位置。</p>
+<h5 id="相机位置"><a href="#相机位置" class="headerlink" title="相机位置"></a>相机位置</h5><p>相机的<code>position</code>属性决定其位置, 参数分别为 x、y、z。   <code>camera.position.set(x, y, z)</code></p>
+<p>相机的up属性决定相机的正视方向，三个参数分别为x、y、z三个维度的向量。   <code>camera.up.set(0, 1, 0)</code>  // y轴正向，人正立观察对象</p>
+<p><code>Vector3</code>对象。   <code>Vector3( x : Float, y : Float, z : Float )</code>  这个属性既可以表示三维空间中的<code>点</code>也可以表示<code>向量</code></p>
+<p>相机还有很重要的一个属性<code>视点</code>需要设置，也就是人眼的<code>焦点</code>，调用<code>lookAt</code>方法即可，参数为<code>Vector3</code>对象，<code>点(0, 0, 0)</code>表示<code>坐标系原点</code>。</p>
+<h3 id="渲染器"><a href="#渲染器" class="headerlink" title="渲染器"></a>渲染器</h3><p><code>视网膜</code>的作用是<code>成像</code>，在 ThreeJS 框架中的<code>渲染器</code>起到相同的作用</p>
+<p>Threejs提供了几种渲染器，最常用的是 <code>WebGLRenderer</code> , 其他的视情况看兼容性而定。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</span><br><span class="line">renderer.setSize(<span class="built_in">window</span>.innerWidth, <span class="built_in">window</span>.innerHeight); <span class="comment">//设置渲染器宽度和高度</span></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(renderer.domElement); <span class="comment">// 将渲染器防止到body容器下</span></span><br></pre></td></tr></table></figure>
+<h3 id="物体"><a href="#物体" class="headerlink" title="物体"></a>物体</h3><p>Threejs封装了多种几何体，以 <code>BoxGeometry</code> 举例，可以创建正方体或者长方体</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> geometry = <span class="keyword">new</span> THREE.BoxGeometry( <span class="number">100</span>, <span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line"><span class="keyword">var</span> material = <span class="keyword">new</span> THREE.MeshLambertMaterial( &#123;<span class="attr">color</span>: <span class="number">0xff0000</span>&#125; );</span><br><span class="line">cube = <span class="keyword">new</span> THREE.Mesh( geometry, material );</span><br><span class="line">cube.position.set(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p><code>BoxGeometry</code>对象时只用了前三个参数，分别表示<code>长</code>、<code>宽</code>、<code>高</code>；但其实该对象还有三个参数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)</span><br></pre></td></tr></table></figure>
+<p>分别表示每个面由多少三角形组成。在webGL中，最基础的就是<code>点</code>、<code>线</code>、<code>三角形</code> ，threejs中负责的图形都是由这些组成的。上述生成的<code>三角形网格</code> 组成整个正方体轮廓，此时我们还需要给正方体表面添加<code>材质</code> 。</p>
+<p>上面例子中使用的是 <code>MeshLambertMaterial</code>  兰伯特材质, 然后设置颜色为 <code>0xff0000</code></p>
+<p>接着将<code>材质</code>和<code>轮廓</code> 结合在一起就生成了正方体，并设置其中心点在坐标系原点。</p>
+<p>然后将物体添加到场景中 <code>scene.add(cube)</code></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>threejs 主要由渲染器、场景、相机组成。通过配置好场景、相机，然后将生成的物体放置在场景中，最后通过渲染器生成到屏幕上，就完成一个3D图形了。</p>
+<p>下面是threejs完整代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> THREE.Scene(); <span class="comment">// 创建场景</span></span><br><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> THREE.PerspectiveCamera(<span class="number">75</span>,  <span class="built_in">window</span>.innerWidth / <span class="built_in">window</span>.innerHeight,  <span class="number">0.1</span>,  <span class="number">1000</span>); <span class="comment">// 创建相机</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建渲染器</span></span><br><span class="line"><span class="keyword">const</span> renderer = <span class="keyword">new</span> THREE.WebGLRenderer();</span><br><span class="line">renderer.setSize(<span class="built_in">window</span>.innerWidth, <span class="built_in">window</span>.innerHeight); <span class="comment">//设置渲染器宽度和高度</span></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(renderer.domElement);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置相机</span></span><br><span class="line"><span class="keyword">var</span> origPoint = <span class="keyword">new</span> THREE.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>); <span class="comment">//原点</span></span><br><span class="line">camera.position.set(<span class="number">20</span>, <span class="number">40</span>, <span class="number">60</span>); <span class="comment">//设置相机位置</span></span><br><span class="line">camera.up.set(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>); <span class="comment">//设置相机正方向 y正方向向量</span></span><br><span class="line">camera.lookAt(origPoint);<span class="comment">//设置相机视点</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置物体</span></span><br><span class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> THREE.BoxGeometry(); <span class="comment">// 生成几何体轮廓</span></span><br><span class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> THREE.MeshBasicMaterial(&#123; <span class="attr">color</span>: <span class="number">0x66ccff</span> &#125;); <span class="comment">// 生成几何体材质</span></span><br><span class="line"><span class="keyword">const</span> cube = <span class="keyword">new</span> THREE.Mesh(geometry, material); <span class="comment">// 轮廓、材质生成立方体</span></span><br><span class="line">scene.add(cube); <span class="comment">// 添加到场景中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 渲染</span></span><br><span class="line">renderer.render(scene, camera);</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/30/同步、异步、任务队列/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="深夜杂记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/30/同步、异步、任务队列/" itemprop="url">同步、异步、任务队列</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-30T11:50:46+08:00">
+                2021-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/03/30/同步、异步、任务队列/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/03/30/同步、异步、任务队列/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="JS-同步、异步、任务队列"><a href="#JS-同步、异步、任务队列" class="headerlink" title="JS 同步、异步、任务队列"></a>JS 同步、异步、任务队列</h1><blockquote>
+<p>浏览器是多线程，但 js 是单线程执行的。 其他的诸如事件、网络、定时器都有对应的线程。 当  js 代码同步执行时， 遇到非常耗时的操作可能就会阻塞，体现在页面上就是卡顿以及不能交互等。 为此 js 引入了异步的概念。</p>
+</blockquote>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>当执行 js 过程中遇到比较耗时的操作时， js 会采用异步的方式， 比如网络请求，定时器等。当发出请求或者调用定时器后，不会阻塞当前代码执行，而是会往后继续执行， 最终当网络请求数据回来后，或者定时器计时完毕后，会调用事先传入的回调函数。</p>
+<p>举个例子: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'1'</span>)</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2'</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'3'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a(); <span class="comment">// 依次打印 1 - 3 - 2</span></span><br></pre></td></tr></table></figure>
+<p>可以看到， 打印并不是依次按照代码的顺序打印的， 而且定时器也并没有阻塞后面的打印，而是在打印了 <code>3</code> 之后， 一秒计时到了再打印的 <code>2</code></p>
+<p>但是 js 是单线程的， 又是怎么实现的异步呢？</p>
+<p>因为 js 会维护一个任务队列 （task queue）。 异步任务有了结果后会依次存入任务队列中，<strong>当主线程执行完代码处于空闲状态时</strong>，就会从任务队列中取出事件，执行对应的回调函数。主线程为空时会重复的检查任务队列是否有任务，如果有会取出在主线程中执行，这个重复执行的过程就叫做 <strong>事件循环</strong>. </p>
+<p><img src="http://www.ruanyifeng.com/blogimg/asset/2014/bg2014100802.png" alt=""></p>
+<blockquote>
+<p>ps:  如任务队列中有定时任务时， 会等到定时时间到后才会取出在主线程中执行。</p>
+</blockquote>
+<h3 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h3><blockquote>
+<p>任务队列分为 <strong>宏任务队列</strong>(macro task)  和 <strong>微任务队列</strong>（micro task）, 在一次事件循环中，优先执行完所有微任务队列， 接着才执行宏任务队列</p>
+</blockquote>
+<p>一次事件循环会执行一次从宏任务队列中取出的事件以及微任务队列中所有的微任务</p>
+<ul>
+<li>宏任务 （外部队列）<ul>
+<li>定时器</li>
+<li>事件绑定</li>
+<li>ajax</li>
+<li>Node中fs可以进行异步的I/O操作</li>
+<li>……</li>
+</ul>
+</li>
+<li>微任务 （js 内部队列）<ul>
+<li>Promise(async/await)</li>
+<li>process.nextTick （node中实现的api，把当前任务放到主栈最后执行，当主栈执行完，先执行nextTick，再到等待队列中找）</li>
+<li>……</li>
+</ul>
+</li>
+</ul>
+<h3 id="Node-js-中的任务队列"><a href="#Node-js-中的任务队列" class="headerlink" title="Node.js 中的任务队列"></a>Node.js 中的任务队列</h3><blockquote>
+<p>Node.js  中的事件循环、任务队列和浏览器环境中有些不一样。浏览器中一次事件循环会执行一次宏任务，并将微任务队列清空再执行页面渲染。Node.js 中则是一次事件循环会先将宏任务（文件、IO）全部执行完，再清空微任务队列。 <strong>（11版本之前）</strong> V11.x 版本之后进行了修复。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/04/JS new 运算符的使用和原理剖析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1629,353 +2013,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/从零开始学习Vue源码(一) —— 概览/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="深夜杂记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/" itemprop="url">从零开始学习Vue源码 —— 概览</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:50:23+08:00">
-                2020-07-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/vue/" itemprop="url" rel="index">
-                    <span itemprop="name">vue</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/从零开始学习Vue源码(一) —— 概览/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="从零开始学习Vue源码-——-概览"><a href="#从零开始学习Vue源码-——-概览" class="headerlink" title="从零开始学习Vue源码 —— 概览"></a>从零开始学习Vue源码 —— 概览</h1><p>先上一张图</p>
-<p><img src="https://user-gold-cdn.xitu.io/2017/12/19/1606e7eaa2a664e8?imageslim" alt=""></p>
-<p>以上流程包括了从：</p>
-<blockquote>
-<p>初始化 —— 挂载 —— 解析模版 —— 生成渲染函数 ——   render function转换为VNode节点最终形成Virtual Dom Tree ——  virtual dom tree转化为真实Dom节点从而渲染视图</p>
-</blockquote>
-<p>响应式更新包括了:</p>
-<blockquote>
-<p>在init时进行了<code>Object.defineProperty</code> 的绑定 —— render function渲染读取值，触发getter函数 —— 进行依赖收集 —— 修改对象值触发setter函数 —— 通知<strong>[依赖收集]</strong>中Dep的每个 watcher 值变化了，需要更新视图 —— watcher调用 <code>update</code>来更新视图 ——  将新、旧VNode传入patch进行diff比较，只修改比较得出的差异的部分Dom</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/01/从零开始学习Vue源码(一) —— 概览/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/01/react  知识点/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="深夜杂记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/01/react  知识点/" itemprop="url">react hooks知识点</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-01T23:48:23+08:00">
-                2020-07-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/react/" itemprop="url" rel="index">
-                    <span itemprop="name">react</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/07/01/react  知识点/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/01/react  知识点/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="react-知识点-hooks-class"><a href="#react-知识点-hooks-class" class="headerlink" title="react  知识点(hooks, class)"></a>react  知识点(hooks, class)</h2><h3 id="1-usecallback"><a href="#1-usecallback" class="headerlink" title="1. usecallback"></a>1. usecallback</h3><blockquote>
-<p>缓存函数，依赖项变化后再重新生成.</p>
-<p><a href="https://react.docschina.org/docs/hooks-reference.html#usecallback" target="_blank" rel="noopener"><code>useCallback</code></a> Hook 允许你在重新渲染之间保持对相同的回调引用以使得 <code>shouldComponentUpdate</code> 继续工作</p>
-<p>当缓存的函数依赖项频繁变动的话，可以采用useRef的形式，在 <code>xxxRef.current</code> 上把所依赖的变量写入xxxref， usecallback依赖 xxxRef， 因为xxxref只会创建一次，且xxxref.current始终是最新的，所以可以解决依赖项频繁变更的问题并且可以完成函数的缓存。</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/01/react  知识点/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2026,7 +2063,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2037,7 +2074,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2048,7 +2085,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -2120,7 +2157,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i> 
   </span>

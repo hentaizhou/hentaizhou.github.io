@@ -414,8 +414,7 @@
 
       
         
-          
-            <h1 id="rollup-打包js库"><a href="#rollup-打包js库" class="headerlink" title="rollup 打包js库"></a>rollup 打包js库</h1><blockquote>
+          <h1 id="rollup-打包js库"><a href="#rollup-打包js库" class="headerlink" title="rollup 打包js库"></a>rollup 打包js库</h1><blockquote>
 <p>发布一个js库包含一下几个大致的流程</p>
 <ol>
 <li>编写库代码</li>
@@ -425,42 +424,13 @@
 <li>更新 version，提交tag 出发构建发布流程</li>
 </ol>
 </blockquote>
-<h2 id="1-编写代码库"><a href="#1-编写代码库" class="headerlink" title="1. 编写代码库"></a>1. 编写代码库</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/index.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name = 'huahua') &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">  &#125;</span><br><span class="line">  eat() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'eat food!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Dog</span><br></pre></td></tr></table></figure>
-<h2 id="2-配置打包"><a href="#2-配置打包" class="headerlink" title="2. 配置打包"></a>2. 配置打包</h2><p>打包有几种方式，目前主流是 webpack 和 rollup。 其中webpack适合开发项目打包（代码拆分、静态资源处理），如果是发布类库的话 rollup 更合适。 相关对比可以参考 <a href="https://www.jianshu.com/p/19a3d8ef5e6c" target="_blank" rel="noopener">https://www.jianshu.com/p/19a3d8ef5e6c</a></p>
-<h3 id="rollup"><a href="#rollup" class="headerlink" title="rollup"></a>rollup</h3><p>​    这里我们开发类库使用的是 rollup 进行打包，详细介绍和使用可以参考： <a href="https://www.rollupjs.com/guide/tutorial" target="_blank" rel="noopener">https://www.rollupjs.com/guide/tutorial</a></p>
-<p>默认已经对 rollup 有所了解了，接着我们开始进行打包的配置：</p>
-<ol>
-<li>首先我们先在根目录新建 rollup.config.js 文件，并配置如下：</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pkjson <span class="keyword">from</span> <span class="string">'./package.json'</span>;</span><br><span class="line"><span class="keyword">import</span> filesize <span class="keyword">from</span> <span class="string">'rollup-plugin-filesize'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; babel &#125; <span class="keyword">from</span> <span class="string">'@rollup/plugin-babel'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; nodeResolve &#125; <span class="keyword">from</span> <span class="string">'@rollup/plugin-node-resolve'</span>;</span><br><span class="line"><span class="keyword">import</span> commonjs <span class="keyword">from</span> <span class="string">'@rollup/plugin-commonjs'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; terser &#125; <span class="keyword">from</span> <span class="string">"rollup-plugin-terser"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isDev = process.argv.splice(<span class="number">2</span>).indexOf(<span class="string">'--pub'</span>) &lt; <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> prjName = pkjson.name</span><br><span class="line"><span class="keyword">const</span> ProjectName = <span class="string">'ZMark'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> output = isDev ? &#123; <span class="attr">file</span>: <span class="string">`build/<span class="subst">$&#123;prjName&#125;</span>.js`</span> &#125; : &#123; <span class="attr">file</span>: <span class="string">`build/<span class="subst">$&#123;prjName&#125;</span>.js`</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  input: <span class="string">'src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    ...output,</span><br><span class="line">    format: <span class="string">'umd'</span>,</span><br><span class="line">    name: ProjectName,</span><br><span class="line">    sourcemap: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    nodeResolve(),</span><br><span class="line">    commonjs(&#123;</span><br><span class="line">      sourceMap: <span class="literal">false</span>,  <span class="comment">// Default: true</span></span><br><span class="line">    &#125;),</span><br><span class="line">    filesize(),</span><br><span class="line">    babel(&#123;</span><br><span class="line">      exclude: <span class="string">'node_modules/**'</span>, <span class="comment">// 只编译我们的源代码</span></span><br><span class="line">      babelHelpers: <span class="string">'runtime'</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">    terser(),</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中主要配置是   <code>input</code> , <code>output</code> , <code>plugins</code></p>
-<p><code>input</code> 就是整个库的入口文件</p>
-<p><code>output</code> 就是打包后文件存放的位置，其中比较重要的是 <code>format</code> 这个参数，配置打包模块方式，常用的有 <code>cjs -- commonjs</code>  <code>umd -- 通用模块定义规范</code>  <code>esm -- es moudle</code>  ， 详情参考网上关于  <strong>CommonJS、AMD、CMD、UMD和ES Modules的区别</strong></p>
-<p><code>plugins</code> 是打包过程中使用到的插件，rollup 的精髓就是通过各种插件实现想要的效果。</p>
-<p>上面配置中用到如下插件：</p>
-<ul>
-<li>nodeResolve    加载node_moudles 三方包</li>
-<li>commonjs   （rollup 支持es模块规范，需要将commonjs转成 esm）</li>
-<li>filesize （构建时提示）</li>
-<li>babel （重要！  将 es2015+ 语法转成es5 支持的语法，相关介绍后期单独开一个文章）</li>
-<li>terser (打包压缩)</li>
-</ul>
-<p>接着我们在 <code>package.json</code> 中添加构建脚本 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"build": "rimraf ./build/ &amp;&amp; rollup -c --pub",</span><br></pre></td></tr></table></figure>
-<p>其中 <code>rimraf</code> 是安装的插件，实现构建前将 /build 文件夹及其下面所有文件删除的功能，通过以下方式安装:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i rimraf -D</span><br></pre></td></tr></table></figure>
-<p>执行后就会在根目录 /build 文件下生成打包后的 js 文件</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1l85x31jj30gu05omxp.jpg" alt="image-20210430110115587"></p>
-<h2 id="3-npm-发布"><a href="#3-npm-发布" class="headerlink" title="3. npm 发布"></a>3. npm 发布</h2><p>经过 编写库代码、rollup 构建打包，接下来就是将打包好的库发布到 npm 仓库上去。</p>
-<ol>
-<li>首先需要注册一个 npm 的账户</li>
-<li>完善 <code>package.json</code>  下的包信息</li>
-<li>使用 <code>npm login</code>  本地登陆账号 （注： 如果更改了 npm 源可以能遇到问题，具体参考网上解答或者换回原本的源）</li>
-<li>接着就可以直接发布了 <code>npm publish</code> ，然后在 npm 上就可以看到自己发布的包了。</li>
-</ol>
-<h2 id="4-自动化发布（待续）……"><a href="#4-自动化发布（待续）……" class="headerlink" title="4. 自动化发布（待续）……"></a>4. 自动化发布（待续）……</h2><p>整个打包发库过程还可以更自动化一点，可以通过 travis CI 结合 github来实现 构建发布一条龙服务，具体配置和使用，后面再结合 rollup 打包的 babel 配置一起来说。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/04/30/使用rollup打包并发布一个js库/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -609,25 +579,15 @@
 
       
         
-          
-            <h1 id="Vue-Router-配置踩坑、探究"><a href="#Vue-Router-配置踩坑、探究" class="headerlink" title="Vue-Router 配置踩坑、探究"></a>Vue-Router 配置踩坑、探究</h1><p>先来看一段 Vue-Router 官方的介绍</p>
+          <h1 id="Vue-Router-配置踩坑、探究"><a href="#Vue-Router-配置踩坑、探究" class="headerlink" title="Vue-Router 配置踩坑、探究"></a>Vue-Router 配置踩坑、探究</h1><p>先来看一段 Vue-Router 官方的介绍</p>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8sdpisj30m70b9dgt.jpg" alt="image-20210430153555730"></p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1t65okoqj30lb04674g.jpg" alt="image-20210430153605660"></p>
-<p>可以得出以下几个结论：</p>
-<ol>
-<li>路由是按照从上到下定义的顺序来进行匹配的，也就是说，当前路由当匹配到路由配置中靠前的路由后就会停止后续路由的匹配，即使后面有相同的路由。</li>
-<li><code>path: *</code>  默认会匹配所有路径，那按照第一点来说，该路由配置只能放在最后，否则会影响路由正常跳转。</li>
-</ol>
-<p>但是！！</p>
-<p>在一个项目中，我看到了如下配置</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1ti14xcsj31120ootaj.jpg" alt="image-20210430154731056"></p>
-<p>？？？ 按照上面分析这样不是会导致所有路由都定位到 404 吗</p>
-<p>但是实际我们启动了项目后，路由却能正常跳转，这不是跟上述的规则对不上吗？</p>
-<p>本着探究到底的精神，经过多方询问和查阅，我们在源码中发现了这段代码</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8odst6j31j60q4gqu.jpg" alt="image-20210430164730265"></p>
-<p>原来源码里面已经帮我们进行了处理，不管如何配置 <code>path: *</code> 都会移到最后。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/30/vue-router配置踩坑/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

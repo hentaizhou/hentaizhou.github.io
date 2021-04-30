@@ -90,19 +90,19 @@
 
 
 
-<meta name="description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程   1. 编写代码库123456789101112// src/index.jsclass Dog &amp;#123;  constructor(name = &apos;huahua&apos;) &amp;#1">
+<meta name="description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程">
 <meta name="keywords" content="javascript,rollup,npm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用rollup打包并发布一个js库">
 <meta property="og:url" content="http://yoursite.com/2021/04/30/使用rollup打包并发布一个js库/index.html">
 <meta property="og:site_name" content="深夜杂记">
-<meta property="og:description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程   1. 编写代码库123456789101112// src/index.jsclass Dog &amp;#123;  constructor(name = &apos;huahua&apos;) &amp;#1">
+<meta property="og:description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1l85x31jj30gu05omxp.jpg">
-<meta property="og:updated_time" content="2021-04-30T07:30:33.258Z">
+<meta property="og:updated_time" content="2021-04-30T09:07:59.483Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用rollup打包并发布一个js库">
-<meta name="twitter:description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程   1. 编写代码库123456789101112// src/index.jsclass Dog &amp;#123;  constructor(name = &apos;huahua&apos;) &amp;#1">
+<meta name="twitter:description" content="rollup 打包js库 发布一个js库包含一下几个大致的流程  编写库代码 配置打包 配置 npm 账户和发布配置 配置 travis ci 持续集成环境，相关配置 更新 version，提交tag 出发构建发布流程">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1l85x31jj30gu05omxp.jpg">
 
 
@@ -426,6 +426,7 @@
 <li>更新 version，提交tag 出发构建发布流程</li>
 </ol>
 </blockquote>
+<a id="more"></a>
 <h2 id="1-编写代码库"><a href="#1-编写代码库" class="headerlink" title="1. 编写代码库"></a>1. 编写代码库</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/index.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name = 'huahua') &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">  &#125;</span><br><span class="line">  eat() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name + <span class="string">'eat food!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Dog</span><br></pre></td></tr></table></figure>
 <h2 id="2-配置打包"><a href="#2-配置打包" class="headerlink" title="2. 配置打包"></a>2. 配置打包</h2><p>打包有几种方式，目前主流是 webpack 和 rollup。 其中webpack适合开发项目打包（代码拆分、静态资源处理），如果是发布类库的话 rollup 更合适。 相关对比可以参考 <a href="https://www.jianshu.com/p/19a3d8ef5e6c" target="_blank" rel="noopener">https://www.jianshu.com/p/19a3d8ef5e6c</a></p>
 <h3 id="rollup"><a href="#rollup" class="headerlink" title="rollup"></a>rollup</h3><p>​    这里我们开发类库使用的是 rollup 进行打包，详细介绍和使用可以参考： <a href="https://www.rollupjs.com/guide/tutorial" target="_blank" rel="noopener">https://www.rollupjs.com/guide/tutorial</a></p>

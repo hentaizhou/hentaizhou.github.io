@@ -90,22 +90,22 @@
 
 
 
-<meta name="description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍   可以得出以下几个结论：  路由是按照从上到下定义的顺序来进行匹配的，也就是说，当前路由当匹配到路由配置中靠前的路由后就会停止后续路由的匹配，即使后面有相同的路由。 path: *  默认会匹配所有路径，那按照第一点来说，该路由配置只能放在最后，否则会影响路由正常跳转。  但是！！ 在一个项目中，我看到了如下配置">
+<meta name="description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍">
 <meta name="keywords" content="Vue,Vue-Router">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vue-router配置踩坑">
 <meta property="og:url" content="http://yoursite.com/2021/03/30/vue-router配置踩坑/index.html">
 <meta property="og:site_name" content="深夜杂记">
-<meta property="og:description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍   可以得出以下几个结论：  路由是按照从上到下定义的顺序来进行匹配的，也就是说，当前路由当匹配到路由配置中靠前的路由后就会停止后续路由的匹配，即使后面有相同的路由。 path: *  默认会匹配所有路径，那按照第一点来说，该路由配置只能放在最后，否则会影响路由正常跳转。  但是！！ 在一个项目中，我看到了如下配置">
+<meta property="og:description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8sdpisj30m70b9dgt.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1t65okoqj30lb04674g.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1ti14xcsj31120ootaj.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8odst6j31j60q4gqu.jpg">
-<meta property="og:updated_time" content="2021-04-30T09:00:21.681Z">
+<meta property="og:updated_time" content="2021-04-30T09:08:11.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue-router配置踩坑">
-<meta name="twitter:description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍   可以得出以下几个结论：  路由是按照从上到下定义的顺序来进行匹配的，也就是说，当前路由当匹配到路由配置中靠前的路由后就会停止后续路由的匹配，即使后面有相同的路由。 path: *  默认会匹配所有路径，那按照第一点来说，该路由配置只能放在最后，否则会影响路由正常跳转。  但是！！ 在一个项目中，我看到了如下配置">
+<meta name="twitter:description" content="Vue-Router 配置踩坑、探究先来看一段 Vue-Router 官方的介绍">
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8sdpisj30m70b9dgt.jpg">
 
 
@@ -421,6 +421,7 @@
       
         <h1 id="Vue-Router-配置踩坑、探究"><a href="#Vue-Router-配置踩坑、探究" class="headerlink" title="Vue-Router 配置踩坑、探究"></a>Vue-Router 配置踩坑、探究</h1><p>先来看一段 Vue-Router 官方的介绍</p>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1v8sdpisj30m70b9dgt.jpg" alt="image-20210430153555730"></p>
+<a id="more"></a>
 <p><img src="https://tva1.sinaimg.cn/large/008i3skNly1gq1t65okoqj30lb04674g.jpg" alt="image-20210430153605660"></p>
 <p>可以得出以下几个结论：</p>
 <ol>
